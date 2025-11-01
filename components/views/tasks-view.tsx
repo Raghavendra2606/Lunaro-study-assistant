@@ -212,11 +212,11 @@ export function TasksView() {
               placeholder="Task title..."
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && addNewTask()}
+              onKeyDown={(e) => e.key === "Enter" && addNewTask()}
               className="mb-4"
               disabled={submitting}
             />
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Priority</label>
                 <select
@@ -246,8 +246,8 @@ export function TasksView() {
                 </select>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button onClick={addNewTask} className="gap-2" disabled={submitting}>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={addNewTask} className="gap-2 w-full sm:w-auto" disabled={submitting}>
                 {submitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -260,7 +260,7 @@ export function TasksView() {
                   </>
                 )}
               </Button>
-              <Button onClick={() => setShowForm(false)} variant="outline" disabled={submitting}>
+              <Button onClick={() => setShowForm(false)} variant="outline" className="w-full sm:w-auto" disabled={submitting}>
                 Cancel
               </Button>
             </div>
@@ -271,7 +271,7 @@ export function TasksView() {
         <div className="space-y-3">
           {tasks.map((task) => (
             <Card key={task._id} className="p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
-              <button onClick={() => updateTaskStatus(task._id, !task.completed)} className="flex-shrink-0">
+              <button onClick={() => updateTaskStatus(task._id, !task.completed)} className="flex-shrink-0 p-2.5 rounded">
                 {task.completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green-500" />
                 ) : (
@@ -293,7 +293,8 @@ export function TasksView() {
               </span>
               <button
                 onClick={() => deleteTask(task._id)}
-                className="text-destructive hover:bg-destructive/10 p-2 rounded"
+                className="text-destructive hover:bg-destructive/10 p-3 rounded"
+                aria-label="Delete task"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

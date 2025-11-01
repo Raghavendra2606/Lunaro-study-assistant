@@ -10,7 +10,8 @@ import { FocusMode } from "./views/focus-mode"
 import { NotesView } from "./views/notes-view"
 import { ProgressView } from "./views/progress-view"
 import { useAuth } from "./auth-provider"
-import { Loader2 } from "lucide-react"
+import { Loader2, Menu } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 type ViewType = "tasks" | "assignments" | "subjects" | "focus" | "notes" | "progress"
 
@@ -19,6 +20,7 @@ export function Dashboard() {
   const { user, token, logout } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     if (!token) {
@@ -57,8 +59,61 @@ export function Dashboard() {
 
   return (
     <div className="flex h-screen bg-background text-foreground">
-      <Sidebar currentView={currentView} onViewChange={setCurrentView} user={user} onLogout={logout} />
-      <main className="flex-1 overflow-auto">{renderView()}</main>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex">
+        <Sidebar currentView={currentView} onViewChange={setCurrentView} user={user} onLogout={logout} />
+      </div>
+
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
+        <header className="md:hidden sticky top-0 z-20 bg-background border-b border-border px-4 py-3">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="Open menu">
+              <Menu className="w-6 h-6" />
+            </Button>
+            <div className="flex-1 min-w-0">
+              <h1 className="font-bold truncate">StudyHub</h1>
+            </div>
+            <Button variant="outline" size="sm" onClick={logout} aria-label="Logout" className="ml-auto">
+              Logout
+            </Button>
+          </div>
+        </header>
+
+        {/* Mobile Sidebar Drawer */}
+        {mobileOpen && (
+          <div className="md:hidden fixed inset-0 z-30" aria-modal="true" role="dialog">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setMobileOpen(false)}
+            />
+            {/* Panel */}
+            <div
+              className="absolute left-0 top-0 h-full w-64 bg-card border-r border-border shadow-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Sidebar
+                currentView={currentView}
+                onViewChange={(v) => {
+                  setCurrentView(v)
+                  setMobileOpen(false)
+                }}
+                user={user}
+                onLogout={() => {
+                  setMobileOpen(false)
+                  logout()
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main content */}
+        <main className="flex-1 overflow-auto px-4 sm:px-6 lg:px-8 pb-6 md:pb-0">
+          {renderView()}
+        </main>
+      </div>
     </div>
   )
 }
