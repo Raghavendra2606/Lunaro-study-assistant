@@ -34,7 +34,7 @@ export function Sidebar({ currentView, onViewChange, user, onLogout }: SidebarPr
             <Brain className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-lg">StudyHub</h1>
+            <h1 className="font-bold text-lg">Lunaro</h1>
             <p className="text-xs text-muted-foreground">Learn Smart</p>
           </div>
         </div>

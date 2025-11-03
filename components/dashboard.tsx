@@ -72,7 +72,7 @@ export function Dashboard() {
               <Menu className="w-6 h-6" />
             </Button>
             <div className="flex-1 min-w-0">
-              <h1 className="font-bold truncate">StudyHub</h1>
+              <h1 className="font-bold truncate">Lunaro</h1>
             </div>
             <Button variant="outline" size="sm" onClick={logout} aria-label="Logout" className="ml-auto">
               Logout
